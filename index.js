@@ -11,7 +11,7 @@ const app = express();
 
 //db
 mongoose
-  .connect(process.env.DATABASE_SERVER)
+  .connect('mongodb+srv://huyquang:huyquang123@huyecom.mlxzivo.mongodb.net/?retryWrites=true&w=majority')
   .then(() => console.log("DB CONNECTED"))
   .catch((err) => console.log(`DB CONNECTION ERR`, err));
 
