@@ -24,4 +24,9 @@ const couponSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// Instance method to check if the coupon is expired
+couponSchema.methods.isExpired = function() {
+  return new Date() > this.expiry;
+};
+
 module.exports = mongoose.model("Coupon", couponSchema);
