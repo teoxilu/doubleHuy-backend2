@@ -4,6 +4,10 @@ const { ObjectId } = mongoose.Schema;
 
 const orderSchema = new mongoose.Schema(
   {
+    ghnID: {
+      type: "String",
+      default: "Not Processed",
+    },
     products: [
       {
         product: {

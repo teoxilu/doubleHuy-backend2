@@ -3,6 +3,9 @@ const mongoose = require("mongoose");
 const morgan = require("morgan");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+require('@babel/register')({
+  presets: ['@babel/preset-env', '@babel/preset-react']
+});
 const { readdirSync } = require("fs");
 require("dotenv").config();
 

@@ -28,6 +28,15 @@ exports.listAll = async (req, res) => {
   res.json(products);
 };
 
+exports.listAllAll = async (req, res) => {
+  let products = await Product.find({})
+    .populate("category")
+    .populate("subs")
+    .sort([["createdAt", "desc"]])
+    .exec();
+  res.json(products);
+};
+
 exports.remove = async (req, res) => {
   try {
     const deleted = await Product.findOneAndRemove({

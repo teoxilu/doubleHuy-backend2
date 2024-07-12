@@ -1,9 +1,20 @@
-
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { sendConfirmationEmail } = require('../controllers/orderController');
-const { authCheck } = require('../middlewares/auth');
+const {
+  sendConfirmationEmail,
+  createGhnOrder,
+  trackOrder,
+  getGHNAddress,
+} = require("../controllers/orderController");
 
-router.post('/send-confirmation-email', authCheck, sendConfirmationEmail);
+const { updateOrder } = require("../controllers/user");
+
+const { authCheck } = require("../middlewares/auth");
+
+router.post("/send-confirmation-email", authCheck, sendConfirmationEmail);
+router.put("/update-order/:orderId", updateOrder);
+// router.post("/create-ghn-order", authCheck, createGhnOrder);
+// router.get("/track-order/:orderCode", authCheck, trackOrder);
+// router.get("/address/:addressId", authCheck, getGHNAddress);
 
 module.exports = router;
