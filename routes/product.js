@@ -12,11 +12,11 @@ const {
   read,
   update,
   list,
+  listAllAll,
   productsCount,
   productStar,
   listRelated,
-  searchFilters,
-  listAllAll
+  searchFilters
 } = require("../controllers/product");
 
 // routes
@@ -30,6 +30,6 @@ router.put("/product/:slug", authCheck, adminCheck, update);
 router.post("/products", list);
 router.put("/product/star/:productId", authCheck, productStar);
 router.get("/product/related/:productId", listRelated);
-router.post("/search/filters", searchFilters)
-
+router.get("/products/all", listAllAll);
+router.post("/search/filters", searchFilters);
 module.exports = router;

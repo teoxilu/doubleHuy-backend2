@@ -8,110 +8,244 @@ const {
 } = require("@react-pdf/renderer");
 const numeral = require("numeral");
 
+// const styles = StyleSheet.create({
+//   page: {
+//     padding: 20,
+//     fontFamily: 'Helvetica',
+//     fontSize: 12,
+//     color: '#333',
+//   },
+//   header: {
+//     fontSize: 24,
+//     marginBottom: 20,
+//     textAlign: 'center',
+//     fontWeight: 'bold',
+//     color: '#4A90E2',
+//   },
+//   section: {
+//     marginBottom: 10,
+//     padding: 10,
+//     border: '1px solid #E0E0E0',
+//     borderRadius: 5,
+//   },
+//   title: {
+//     fontSize: 18,
+//     marginBottom: 10,
+//     textDecoration: 'underline',
+//     fontWeight: 'bold',
+//     color: '#4A90E2',
+//   },
+//   companyInfo: {
+//     fontSize: 12,
+//     lineHeight: 1.5,
+//   },
+//   keyInfo: {
+//     fontWeight: 'bold',
+//   },
+//   table: {
+//     display: 'table',
+//     width: '100%',
+//     marginBottom: 10,
+//   },
+//   tableRow: {
+//     display: 'flex',
+//     flexDirection: 'row',
+//   },
+//   tableColHeader: {
+//     width: '20%',
+//     padding: 5,
+//     backgroundColor: '#F0F0F0',
+//     border: '1px solid #E0E0E0',
+//     textAlign: 'center',
+//   },
+//   tableCellHeader: {
+//     fontWeight: 'bold',
+//   },
+//   tableColContent: {
+//     width: '20%',
+//     padding: 5,
+//     border: '1px solid #E0E0E0',
+//     textAlign: 'center',
+//   },
+//   tableCell: {
+//     textAlign: 'center',
+//   },
+//   footer: {
+//     marginTop: 20,
+//     fontSize: 10,
+//     textAlign: 'center',
+//     color: '#888',
+//   },
+//   notes: {
+//     marginTop: 5,
+//     fontSize: 10,
+//     color: '#666',
+//   },
+//   primary: {
+//     fontSize: 16,
+//     fontWeight: 'bold',
+//     color: '#D32F2F',
+//   },
+// });
 
 const styles = StyleSheet.create({
   page: {
+    flexDirection: "column",
+    backgroundColor: "#FFFFFF",
     padding: 20,
-    fontFamily: 'Helvetica',
-    fontSize: 12,
-    color: '#333',
-  },
-  header: {
-    fontSize: 24,
-    marginBottom: 20,
-    textAlign: 'center',
-    fontWeight: 'bold',
-    color: '#4A90E2',
   },
   section: {
-    marginBottom: 10,
-    padding: 10,
-    border: '1px solid #E0E0E0',
-    borderRadius: 5,
+    marginVertical: 10,
   },
-  title: {
-    fontSize: 18,
+  header: {
+    fontSize: 14,
+    fontWeight: 500,
     marginBottom: 10,
-    textDecoration: 'underline',
-    fontWeight: 'bold',
-    color: '#4A90E2',
+    textAlign: "center",
+    textTransform: "uppercase",
+    color: "#281714",
   },
   companyInfo: {
     fontSize: 12,
-    lineHeight: 1.5,
+    marginBottom: 10,
+    color: "#281714",
   },
   keyInfo: {
-    fontWeight: 'bold',
+    fontSize: 12,
+    marginBottom: 10,
+    color: "#5d403b",
   },
-  table: {
-    display: 'table',
-    width: '100%',
+  customerInfo: {
+    fontSize: 12,
     marginBottom: 10,
   },
+  title: {
+    fontSize: 13,
+    marginBottom: 10,
+    fontWeight: 500,
+    color: "#281714",
+  },
+  table: {
+    display: "table",
+    width: "auto",
+    borderStyle: "solid",
+    borderWidth: 1,
+    borderRightWidth: 0,
+    borderBottomWidth: 0,
+  },
   tableRow: {
-    display: 'flex',
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   tableColHeader: {
-    width: '20%',
+    verticalAlign: "middle",
+    width: "20%",
+    borderStyle: "solid",
+    borderWidth: 1,
+    borderLeftWidth: 0,
+    borderTopWidth: 0,
+    backgroundColor: "#E4E4E4",
     padding: 5,
-    backgroundColor: '#F0F0F0',
-    border: '1px solid #E0E0E0',
-    textAlign: 'center',
+  },
+  tableCol: {
+    width: "20%",
+    borderStyle: "solid",
+    borderWidth: 1,
+    borderLeftWidth: 0,
+    borderTopWidth: 0,
+    padding: 5,
   },
   tableCellHeader: {
-    fontWeight: 'bold',
+    fontSize: 10,
+    fontWeight: "bold",
   },
-  tableColContent: {
-    width: '20%',
+  tableColHeaderContentHighlight: {
+    width: "20%",
+    borderStyle: "solid",
+    borderWidth: 1,
+    borderLeftWidth: 0,
+    borderTopWidth: 0,
+    backgroundColor: "#8c611280",
+    color: "#ffffff",
     padding: 5,
-    border: '1px solid #E0E0E0',
-    textAlign: 'center',
+  },
+  tableColHeaderContentNonHighlight: {
+    width: "20%",
+    borderStyle: "solid",
+    borderWidth: 1,
+    borderLeftWidth: 0,
+    borderTopWidth: 0,
+    backgroundColor: "#ffffff",
+    color: "#281714",
+    padding: 5,
   },
   tableCell: {
-    textAlign: 'center',
-  },
-  footer: {
-    marginTop: 20,
     fontSize: 10,
-    textAlign: 'center',
-    color: '#888',
+  },
+  total: {
+    fontSize: 12,
+    marginTop: 10,
+  },
+  paymentMethod: {
+    fontSize: 12,
+    marginTop: 10,
   },
   notes: {
-    marginTop: 5,
-    fontSize: 10,
-    color: '#666',
+    fontSize: 12,
+    textAlign: "center",
+    marginTop: 10,
+    color: "#5d403b",
   },
-  primary: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#D32F2F',
+  primary: { fontSize: 12, color: "#8f0000" },
+  text: { fontSize: 12, color: "#281714" },
+  footer: {
+    paddingTop: "100px",
+    paddingHorizontal: "100px",
+    fontSize: 12,
+    textAlign: "center",
+    color: "#8f0000",
+    backgroundImage:
+      "-webkit-linear-gradient(0deg, #8f0000 0%, #a7382a 50%, #603f00 100%)",
+    backgroundClip: "text",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+    textFillColor: "transparent",
   },
 });
-
-
-
-
-
 
 const Invoice = ({ order }) => {
   return (
     <Document>
       <Page size="A4" style={styles.page}>
         <Text style={styles.header}>INVOICE</Text>
-        
-        {/* Company Info Section */}
+
         <View style={styles.section}>
           <Text style={styles.title}>Company Info</Text>
           <Text style={styles.companyInfo}>
-            <Text style={styles.keyInfo}>Company Name:</Text> 2HS{"\n"}
-            <Text style={styles.keyInfo}>Address:</Text> 01 Vo Van Ngan, Linh Chieu, Thu Duc, Ho Chi Minh City{"\n"}
-            <Text style={styles.keyInfo}>Hotline:</Text> +84 973 711 868{"\n"}
-            <Text style={styles.keyInfo}>Email:</Text> support@2hs.com
+            <Text>
+              <Text style={styles.keyInfo}>Company Name:</Text> 2HS{"\n"}
+            </Text>
+            <Text>
+              <Text style={styles.keyInfo}>Address:</Text> 01 Vo Van Ngan, Linh
+              Chieu, Thu Duc, Ho Chi Minh City{"\n"}
+            </Text>
+            <Text>
+              <Text style={styles.keyInfo}>Hotline:</Text> +84 973 711 868{"\n"}
+            </Text>
+            <Text>
+              <Text style={styles.keyInfo}>Email:</Text> support@2hs.com
+            </Text>
           </Text>
         </View>
+        {/* 
+        <View style={styles.section}>
+            <Text style={styles.customerInfo}>
+                <Text>Customer Name: John Doe{'\n'}</Text>
+                <Text>Address: 456 XYZ Street, District 3, Ho Chi Minh City{'\n'}</Text>
+                <Text>Phone Number: +84 987 654 321{'\n'}</Text>
+                <Text>Email: johndoe@example.com</Text>
+            </Text>
+        </View> */}
 
-        {/* Order Details Section */}
         <View style={styles.section}>
           <Text style={styles.title}>Order Details:</Text>
           <View style={styles.table}>
@@ -132,63 +266,63 @@ const Invoice = ({ order }) => {
                 <Text style={styles.tableCellHeader}>Quantity</Text>
               </View>
             </View>
-            {order.products.map((product, index) => (
-              <View style={styles.tableRow} key={index}>
-                <View style={styles.tableColContent}>
-                  <Text style={styles.tableCell}>
+
+            {order.products.map((product) => (
+              <View style={styles.tableRow}>
+                <View style={styles.tableColHeaderContentNonHighlight}>
+                  <Text style={styles.tableCellHeader}>
                     {product.product.title}
                   </Text>
                 </View>
-                <View style={styles.tableColContent}>
-                  <Text style={styles.tableCell}>
+                <View style={styles.tableColHeaderContentHighlight}>
+                  <Text
+                    style={styles.tableCellHeader}
+                    className="bg-light-tertiary-container/50 text-light-on-primary-container"
+                  >
                     {numeral(product.product.price).format("0,0")} VND
                   </Text>
                 </View>
-                <View style={styles.tableColContent}>
-                  <Text style={styles.tableCell}>
+                <View style={styles.tableColHeaderContentNonHighlight}>
+                  <Text style={styles.tableCellHeader}>
                     {product.product.brand}
                   </Text>
                 </View>
-                <View style={styles.tableColContent}>
-                  <Text style={styles.tableCell}>
+                <View style={styles.tableColHeaderContentHighlight}>
+                  <Text
+                    style={styles.tableCellHeader}
+                    className="bg-light-tertiary-container/50 text-light-on-primary-container"
+                  >
                     {product.product.size}
                   </Text>
                 </View>
-                <View style={styles.tableColContent}>
-                  <Text style={styles.tableCell}>{product.count}</Text>
+                <View style={styles.tableColHeaderContentNonHighlight}>
+                  <Text style={styles.tableCellHeader}>{product.count}</Text>
                 </View>
               </View>
             ))}
           </View>
         </View>
 
-        {/* Total Amount Section */}
         <View style={styles.section}>
-          <Text style={styles.title}>Total Amount:</Text>
+          <Text style={styles.title}>Total Amount:{"\n"}</Text>
           <Text style={styles.primary}>
             {numeral(order.paymentIntent.amount).format("0,0")} VND
           </Text>
         </View>
-
-        {/* Payment Method Section */}
         <View style={styles.section}>
-          <Text style={styles.title}>Payment Method:</Text>
+          <Text style={styles.title}>Payment Method:{"\n"}</Text>
           <Text style={styles.text}>{order.paymentIntent.status}</Text>
         </View>
-
-        {/* Footer Section */}
         <Text style={styles.footer}>
-          ~ Thank you for shopping at 2HS! ~
+          ~ Thank you for shopping at 2HS! ~{"\n"}
         </Text>
         <Text style={styles.notes}>
-          If you have any questions, please contact us via email or phone number above.
+          If you have any questions, please contact us via email or phone number
+          above.
         </Text>
       </Page>
     </Document>
   );
 };
-
-
-
 
 module.exports = Invoice;

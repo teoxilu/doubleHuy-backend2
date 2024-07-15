@@ -17,7 +17,7 @@ const BANNER_CONTENT = [
     title: "Nike Air Max - Pinnacle of Technology",
     desc: "Designed to optimize performance, Nike Air Max offers exceptional comfort and style with every step.",
     button: "View Now",
-    class: "bottom-20 left-20 -translate-y-1/2",
+    class: "bottom-20 left-20 -translate-y-1/2 bg-light-surface-container-high",
   },
   {
     image: "banner3",
