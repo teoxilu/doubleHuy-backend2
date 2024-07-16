@@ -57,6 +57,27 @@ exports.read = async (req, res) => {
   res.json(product);
 };
 
+exports.checkProductAvailability = async (req, res) => {
+  try {
+    const product = await Product.findOne({ slug: req.params.slug }).exec();
+
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    if (product.quantity > 0) {
+      return res.json({ available: true, message: 'Product is available' });
+    } else {
+      return res.json({ available: false, message: 'Product is out of stock' });
+    }
+  } catch (error) {
+    console.error('Error checking product availability:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+
+
 exports.update = async (req, res) => {
   try {
     if (req.body.title) {
