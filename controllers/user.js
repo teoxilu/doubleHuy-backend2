@@ -29,19 +29,32 @@ exports.userCart = async (req, res) => {
       let object = {};
 
       let productFromDb = await Product.findById(cart[i]._id)
-        .select("price")
+        .select("price quantity")
         .exec();
 
-      if (productFromDb) {
-        object.product = cart[i]._id;
-        object.count = cart[i].count;
-        object.size = cart[i].size;
-        object.price = productFromDb.price;
+      // if (productFromDb && productFromDb.quantity <= 0) continue;
+      object.product = cart[i]._id;
+      object.title = cart[i].title;
+      object.count = cart[i].count;
+      object.size = cart[i].size;
+      object.price = cart[i].price;
+      // object.price = productFromDb?.price;
+      console.log(object);
 
+      if (productFromDb && productFromDb.quantity >= cart[i].count) {
         products.push(object);
       } else {
-        console.log(`Product with id ${cart[i]._id} not found`);
+        outOfStockItems.push(object);
       }
+    }
+
+    if (outOfStockItems.length > 0) {
+      return res.status(200).json({
+        isSomeItemsOutOfStock: true,
+        message: "Some items are out of stock",
+        outOfStockItems,
+        availableItems: products,
+      });
     }
 
     // console.log('products', products)
@@ -63,6 +76,7 @@ exports.userCart = async (req, res) => {
     res.json({ ok: true });
   } catch (error) {
     console.error(error);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -160,6 +174,65 @@ exports.applyCouponToUserCart = async (req, res) => {
   res.json(totalAfterDiscount);
 };
 
+exports.checkOrder = async (req, res) => {
+  // const { paymentIntent } = req.body.stripeResponse;
+  const { cart } = req.body;
+
+  const user = await User.findOne({ email: req.user.email }).exec();
+
+  let { products } = await Cart.findOne({ orderedBy: user._id }).exec();
+
+  try {
+    let outOfStockItems = [];
+    let availableItems = [];
+
+    for (let product of products) {
+      const productInDB = await Product.findById(product._id);
+
+      if (productInDB && productInDB.quantity >= item.quantity) {
+        availableItems.push(item);
+      } else {
+        outOfStockItems.push(item);
+      }
+    }
+
+    if (outOfStockItems.length > 0) {
+      return res.status(200).json({
+        message: "Some items are out of stock",
+        outOfStockItems,
+        availableItems,
+      });
+    }
+
+    let newOrder = await new Order({
+      products: availableItems,
+      paymentIntent,
+      orderedBy: user._id,
+    }).save();
+
+    // decrement quantity, increment sold
+    let bulkOption = products.map((item) => {
+      return {
+        updateOne: {
+          filter: { _id: item.product._id }, // IMPORTANT item.product
+          update: { $inc: { quantity: -item.count, sold: +item.count } },
+        },
+      };
+    });
+
+    let updated = await Product.bulkWrite(bulkOption, {});
+    console.log("PRODUCT QUANTITY-- AND SOLD++", updated);
+
+    // await sendConfirmationEmail(user.email, newOrder);
+
+    // console.log("NEW ORDER SAVED", newOrder);
+    res.status(200).json({ ok: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 exports.createOrder = async (req, res) => {
   // console.log(req.body);
   // return;
@@ -169,29 +242,34 @@ exports.createOrder = async (req, res) => {
 
   let { products } = await Cart.findOne({ orderedBy: user._id }).exec();
 
-  let newOrder = await new Order({
-    products,
-    paymentIntent,
-    orderedBy: user._id,
-  }).save();
+  try {
+    let newOrder = await new Order({
+      products,
+      paymentIntent,
+      orderedBy: user._id,
+    }).save();
 
-  // decrement quantity, increment sold
-  let bulkOption = products.map((item) => {
-    return {
-      updateOne: {
-        filter: { _id: item.product._id }, // IMPORTANT item.product
-        update: { $inc: { quantity: -item.count, sold: +item.count } },
-      },
-    };
-  });
+    // decrement quantity, increment sold
+    let bulkOption = products.map((item) => {
+      return {
+        updateOne: {
+          filter: { _id: item.product._id }, // IMPORTANT item.product
+          update: { $inc: { quantity: -item.count, sold: +item.count } },
+        },
+      };
+    });
 
-  let updated = await Product.bulkWrite(bulkOption, {});
-  console.log("PRODUCT QUANTITY-- AND SOLD++", updated);
+    let updated = await Product.bulkWrite(bulkOption, {});
+    console.log("PRODUCT QUANTITY-- AND SOLD++", updated);
 
-  // await sendConfirmationEmail(user.email, newOrder);
+    // await sendConfirmationEmail(user.email, newOrder);
 
-  console.log("NEW ORDER SAVED", newOrder);
-  res.json({ ok: true });
+    // console.log("NEW ORDER SAVED", newOrder);
+    res.status(200).json({ ok: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
 };
 
 exports.orders = async (req, res) => {
